@@ -92,39 +92,9 @@ server.port=8080
   - `none`: No hace nada
 - `spring.jpa.show-sql`: Muestra las consultas SQL en consola
 
-### Paso 3: Crear la base de datos
-
-```sql
--- Conectarse a PostgreSQL
-psql -U postgres
--- O en Linux: sudo -u postgres psql
-
--- Crear base de datos
-CREATE DATABASE springboot_db;
-
--- Crear usuario (si no existe)
-CREATE USER springuser WITH PASSWORD 'springpass';
-
--- Otorgar privilegios
-GRANT ALL PRIVILEGES ON DATABASE springboot_db TO springuser;
-
--- Conectarse a la base de datos
-\c springboot_db
-
--- Otorgar privilegios en el esquema public
-GRANT ALL ON SCHEMA public TO springuser;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO springuser;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO springuser;
-
--- Salir
-\q
-```
-
-**Nota**: Si ya creaste la base de datos en la guía de instalación, puedes omitir este paso.
-
 ---
 
-## 3. Crear tu primera entidad
+### Paso 3: Crear tu primera entidad
 
 ### Ejemplo: Entidad Producto
 
