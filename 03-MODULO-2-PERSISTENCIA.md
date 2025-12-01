@@ -1,7 +1,7 @@
-# Módulo 2 - Persistencia con JPA y MySQL (5 horas)
+# Módulo 2 - Persistencia con JPA y PostgreSQL (5 horas)
 
 ## 📋 Objetivos del Módulo
-- Conectar Spring Boot a bases de datos MySQL
+- Conectar Spring Boot a bases de datos PostgreSQL
 - Aprender sobre entidades, relaciones y repositorios JPA
 - Implementar CRUD profesional con JPA Repository
 - Aplicar validaciones con anotaciones
@@ -44,10 +44,10 @@ En `pom.xml`, agrega estas dependencias:
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     
-    <!-- MySQL Driver -->
+    <!-- PostgreSQL Driver -->
     <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
         <scope>runtime</scope>
     </dependency>
     
@@ -65,16 +65,16 @@ Crea o edita `src/main/resources/application.properties`:
 
 ```properties
 # Configuración de la base de datos
-spring.datasource.url=jdbc:mysql://localhost:3306/springboot_db?useSSL=false&serverTimezone=UTC
+spring.datasource.url=jdbc:postgresql://localhost:5432/springboot_db
 spring.datasource.username=springuser
 spring.datasource.password=springpass
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.driver-class-name=org.postgresql.Driver
 
 # Configuración de JPA/Hibernate
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 # Puerto del servidor
 server.port=8080
@@ -82,9 +82,9 @@ server.port=8080
 
 ### Explicación de propiedades
 
-- `spring.datasource.url`: URL de conexión a MySQL
-- `spring.datasource.username`: Usuario de MySQL
-- `spring.datasource.password`: Contraseña de MySQL
+- `spring.datasource.url`: URL de conexión a PostgreSQL (puerto 5432 por defecto)
+- `spring.datasource.username`: Usuario de PostgreSQL
+- `spring.datasource.password`: Contraseña de PostgreSQL
 - `spring.jpa.hibernate.ddl-auto`: 
   - `update`: Crea/actualiza tablas automáticamente
   - `create`: Crea tablas cada vez (¡cuidado, borra datos!)
@@ -95,21 +95,32 @@ server.port=8080
 ### Paso 3: Crear la base de datos
 
 ```sql
--- Conectarse a MySQL
-mysql -u root -p
+-- Conectarse a PostgreSQL
+psql -U postgres
+-- O en Linux: sudo -u postgres psql
 
 -- Crear base de datos
 CREATE DATABASE springboot_db;
 
 -- Crear usuario (si no existe)
-CREATE USER 'springuser'@'localhost' IDENTIFIED BY 'springpass';
-GRANT ALL PRIVILEGES ON springboot_db.* TO 'springuser'@'localhost';
-FLUSH PRIVILEGES;
+CREATE USER springuser WITH PASSWORD 'springpass';
 
--- Verificar
-SHOW DATABASES;
-USE springboot_db;
+-- Otorgar privilegios
+GRANT ALL PRIVILEGES ON DATABASE springboot_db TO springuser;
+
+-- Conectarse a la base de datos
+\c springboot_db
+
+-- Otorgar privilegios en el esquema public
+GRANT ALL ON SCHEMA public TO springuser;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO springuser;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO springuser;
+
+-- Salir
+\q
 ```
+
+**Nota**: Si ya creaste la base de datos en la guía de instalación, puedes omitir este paso.
 
 ---
 
@@ -924,7 +935,7 @@ Crea un sistema de reservas de hotel con:
 
 ## 🎯 Checklist del Módulo 2
 
-- [ ] Base de datos MySQL configurada
+- [ ] Base de datos PostgreSQL configurada
 - [ ] Dependencias JPA agregadas
 - [ ] Primera entidad creada y funcionando
 - [ ] Repositorio JPA implementado

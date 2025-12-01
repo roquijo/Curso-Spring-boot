@@ -649,5 +649,5 @@ Crea una API REST para gestionar tareas (To-Do) con:
 
 **¡Felicidades! Has completado el Módulo 1** 🎉
 
-**Siguiente paso**: [Módulo 2 - Persistencia con JPA y MySQL](./03-MODULO-2-PERSISTENCIA.md)
+**Siguiente paso**: [Módulo 2 - Persistencia con JPA y PostgreSQL](./03-MODULO-2-PERSISTENCIA.md)
 

@@ -11,7 +11,8 @@ Bienvenido al curso completo de Spring Boot. Este repositorio contiene todas las
    - Instalación de Git
    - Creación de cuenta en GitHub
    - Instalación de IDE (IntelliJ IDEA / VS Code)
-   - Instalación de MySQL
+   - Instalación de Maven
+   - Instalación de PostgreSQL
    - Instalación de Postman
    - Verificación de todas las instalaciones
 
@@ -32,7 +33,7 @@ Bienvenido al curso completo de Spring Boot. Este repositorio contiene todas las
    - Creación de tu primera API REST
    - **Mini proyecto**: Gestión de productos
 
-4. **[Módulo 2 - Persistencia con JPA y MySQL](./03-MODULO-2-PERSISTENCIA.md)** (5 horas)
+4. **[Módulo 2 - Persistencia con JPA y PostgreSQL](./03-MODULO-2-PERSISTENCIA.md)** (5 horas)
    - Conexión de Spring Boot a bases de datos
    - Entidades, relaciones y repositorios
    - CRUD profesional con JPA Repository
@@ -72,7 +73,7 @@ Curso Spring Boot (20 horas totales)
 │
 ├── Módulo 2: Persistencia (5 horas)
 │   ├── JPA y Hibernate
-│   ├── MySQL
+│   ├── PostgreSQL
 │   ├── Relaciones entre entidades
 │   └── Proyecto: Sistema de facturación
 │
@@ -108,7 +109,8 @@ Todas las herramientas se instalan en la [Guía de Instalación](./00-INSTALACIO
 - Java JDK 17 o superior
 - Git
 - IDE (IntelliJ IDEA o VS Code)
-- MySQL 8.0+
+- Maven 3.6+
+- PostgreSQL 15 o superior
 - Postman (opcional pero recomendado)
 - Docker (para el Módulo 4)
 
@@ -143,7 +145,7 @@ Todas las herramientas se instalan en la [Guía de Instalación](./00-INSTALACIO
 Al finalizar este curso, serás capaz de:
 
 - ✅ Crear APIs REST profesionales con Spring Boot
-- ✅ Conectar aplicaciones a bases de datos MySQL usando JPA
+- ✅ Conectar aplicaciones a bases de datos PostgreSQL usando JPA
 - ✅ Implementar seguridad con JWT y roles
 - ✅ Documentar APIs con Swagger
 - ✅ Manejar excepciones y logs apropiadamente

@@ -543,34 +543,39 @@ target/
 
 ### Paso 3: Crear docker-compose.yml
 
-Crea `docker-compose.yml` para incluir MySQL:
+Crea `docker-compose.yml` para incluir PostgreSQL:
 
 ```yaml
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: facturacion-mysql
+  postgres:
+    image: postgres:15-alpine
+    container_name: facturacion-postgres
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: springboot_db
-      MYSQL_USER: springuser
-      MYSQL_PASSWORD: springpass
+      POSTGRES_DB: springboot_db
+      POSTGRES_USER: springuser
+      POSTGRES_PASSWORD: springpass
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - facturacion-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U springuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
     container_name: facturacion-app
     depends_on:
-      - mysql
+      postgres:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springboot_db?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/springboot_db
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: springpass
     ports:
@@ -579,7 +584,7 @@ services:
       - facturacion-network
 
 volumes:
-  mysql_data:
+  postgres_data:
 
 networks:
   facturacion-network:
@@ -641,16 +646,16 @@ Crea `build.sh`:
 2. Crea una cuenta (puedes usar GitHub)
 3. Conecta tu repositorio de GitHub
 
-### Paso 3: Crear base de datos MySQL
+### Paso 3: Crear base de datos PostgreSQL
 
 1. En Render Dashboard, haz clic en "New +"
-2. Selecciona "PostgreSQL" o "MySQL"
+2. Selecciona "PostgreSQL"
 3. Configura:
    - Name: `facturacion-db`
    - Database: `springboot_db`
    - User: `springuser`
    - Password: (genera una segura)
-4. Anota las credenciales
+4. Anota las credenciales (Render te mostrará la URL de conexión completa)
 
 ### Paso 4: Desplegar la aplicación
 
@@ -667,12 +672,14 @@ Crea `build.sh`:
 5. **Agregar variables de entorno**:
    ```
    SPRING_PROFILES_ACTIVE=prod
-   DATABASE_URL=jdbc:mysql://tu-host:3306/springboot_db
+   DATABASE_URL=jdbc:postgresql://tu-host:5432/springboot_db
    DATABASE_USERNAME=springuser
    DATABASE_PASSWORD=tu-password
    JWT_SECRET=tu-clave-secreta-muy-larga-y-segura
    PORT=8080
    ```
+   
+   **Nota**: Render proporciona una variable `DATABASE_URL` completa. Puedes usarla directamente o extraer los componentes individuales.
 
 6. Haz clic en "Create Web Service"
 7. Espera a que se despliegue (5-10 minutos)
@@ -695,8 +702,8 @@ Crea `build.sh`:
 ### Paso 3: Agregar base de datos
 
 1. Haz clic en "New"
-2. Selecciona "Database" → "MySQL"
-3. Railway creará automáticamente la base de datos
+2. Selecciona "Database" → "PostgreSQL"
+3. Railway creará automáticamente la base de datos PostgreSQL
 
 ### Paso 4: Configurar variables de entorno
 
@@ -740,7 +747,7 @@ Railway detecta automáticamente que es una aplicación Java y la despliega.
 ### Opción B: AWS EC2
 
 1. **Crear instancia EC2**
-2. **Instalar Java y MySQL**
+2. **Instalar Java, Maven y PostgreSQL**
 3. **Subir el JAR**
 4. **Ejecutar la aplicación**
 
@@ -874,7 +881,7 @@ API REST desarrollada con Spring Boot para gestión de facturación.
 
 - Java 17 o superior
 - Maven 3.6+
-- MySQL 8.0+
+- PostgreSQL 15 o superior
 - Docker (opcional)
 
 ## 🛠️ Instalación
@@ -882,7 +889,7 @@ API REST desarrollada con Spring Boot para gestión de facturación.
 ### Local
 
 1. Clonar el repositorio
-2. Configurar `application.properties` con tus credenciales de MySQL
+2. Configurar `application.properties` con tus credenciales de PostgreSQL
 3. Ejecutar: `./mvnw spring-boot:run`
 
 ### Docker
@@ -990,7 +997,7 @@ Este proyecto está bajo la Licencia MIT.
 ¡Felicidades! Has completado el curso completo de Spring Boot. Ahora tienes:
 
 - ✅ Conocimiento sólido de Spring Boot
-- ✅ Experiencia con JPA y MySQL
+- ✅ Experiencia con JPA y PostgreSQL
 - ✅ Implementación de seguridad con JWT
 - ✅ Documentación de APIs
 - ✅ Despliegue en producción

@@ -4,12 +4,13 @@ Esta guía te ayudará a instalar todas las herramientas necesarias para comenza
 
 ## 📋 Índice
 1. [Instalación de Java JDK](#instalación-de-java-jdk)
-2. [Instalación de Git](#instalación-de-git)
-3. [Creación de cuenta en GitHub](#creación-de-cuenta-en-github)
-4. [Instalación de IDE (IntelliJ IDEA o VS Code)](#instalación-de-ide)
-5. [Instalación de MySQL](#instalación-de-mysql)
-6. [Instalación de Postman](#instalación-de-postman)
-7. [Verificación de instalaciones](#verificación-de-instalaciones)
+2. [Instalación de Maven](#instalación-de-maven)
+3. [Instalación de Git](#instalación-de-git)
+4. [Creación de cuenta en GitHub](#creación-de-cuenta-en-github)
+5. [Instalación de IDE (IntelliJ IDEA o VS Code)](#instalación-de-ide)
+6. [Instalación de PostgreSQL](#instalación-de-postgresql)
+7. [Instalación de Postman](#instalación-de-postman)
+8. [Verificación de instalaciones](#verificación-de-instalaciones)
 
 ---
 
@@ -76,7 +77,71 @@ javac -version
 
 ---
 
-## 2. Instalación de Git
+## 2. Instalación de Maven
+
+Maven es una herramienta de gestión de proyectos y dependencias para Java. Spring Boot usa Maven para manejar las dependencias del proyecto.
+
+### Windows
+
+1. **Descargar Maven**
+   - Visita: https://maven.apache.org/download.cgi
+   - Descarga el archivo `apache-maven-x.x.x-bin.zip` (Binary zip archive)
+
+2. **Extraer Maven**
+   - Extrae el archivo ZIP en una ubicación como `C:\Program Files\Apache\maven`
+   - La carpeta debería ser: `C:\Program Files\Apache\maven\apache-maven-x.x.x`
+
+3. **Configurar variables de entorno**
+   - Busca "Variables de entorno" en Windows
+   - Crea una variable de sistema llamada `MAVEN_HOME`
+   - Establece su valor a la ruta de Maven (ej: `C:\Program Files\Apache\maven\apache-maven-3.9.5`)
+   - Agrega `%MAVEN_HOME%\bin` al PATH
+
+4. **Verificar la instalación**
+   - Abre una nueva terminal (CMD o PowerShell)
+   - Ejecuta:
+     ```bash
+     mvn -version
+     ```
+   - Deberías ver información sobre Maven instalado
+
+### macOS
+
+1. **Usando Homebrew (recomendado)**
+   ```bash
+   brew install maven
+   ```
+
+2. **O descargar manualmente**
+   - Visita: https://maven.apache.org/download.cgi
+   - Descarga el archivo `.tar.gz`
+   - Extrae y configura las variables de entorno
+
+3. **Verificar la instalación**
+   ```bash
+   mvn -version
+   ```
+
+### Linux (Ubuntu/Debian)
+
+```bash
+# Actualizar repositorios
+sudo apt update
+
+# Instalar Maven
+sudo apt install maven
+
+# Verificar instalación
+mvn -version
+```
+
+### Nota importante
+
+Spring Boot también incluye un Maven Wrapper (`mvnw` o `mvnw.cmd`) en los proyectos generados, que permite usar Maven sin instalarlo globalmente. Sin embargo, es recomendable tener Maven instalado para mayor flexibilidad.
+
+---
+
+## 3. Instalación de Git
 
 ### Windows
 
@@ -116,7 +181,7 @@ git --version
 
 ---
 
-## 3. Creación de cuenta en GitHub
+## 4. Creación de cuenta en GitHub
 
 ### Paso 1: Crear la cuenta
 
@@ -178,7 +243,7 @@ git config --global user.email "tu-email@ejemplo.com"
 
 ---
 
-## 4. Instalación de IDE
+## 5. Instalación de IDE
 
 ### Opción A: IntelliJ IDEA (Recomendado para Spring Boot)
 
@@ -214,73 +279,108 @@ git config --global user.email "tu-email@ejemplo.com"
 
 ---
 
-## 5. Instalación de MySQL
+## 6. Instalación de PostgreSQL
+
+PostgreSQL es un sistema de gestión de bases de datos relacional de código abierto que usaremos en el curso.
 
 ### Windows
 
-1. **Descargar MySQL**
-   - Visita: https://dev.mysql.com/downloads/installer/
-   - Descarga "MySQL Installer for Windows"
+1. **Descargar PostgreSQL**
+   - Visita: https://www.postgresql.org/download/windows/
+   - O usa el instalador oficial: https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+   - Descarga la última versión (recomendado 15 o superior)
 
 2. **Instalar**
    - Ejecuta el instalador
-   - Selecciona "Developer Default"
-   - Sigue el asistente
-   - **IMPORTANTE**: Anota la contraseña del usuario `root` que configures
+   - Durante la instalación:
+     - Selecciona todos los componentes (incluyendo pgAdmin)
+     - **IMPORTANTE**: Anota la contraseña del usuario `postgres` que configures
+     - Puerto por defecto: 5432 (déjalo así)
+     - Locale: usa el predeterminado
 
 3. **Verificar instalación**
-   - Abre MySQL Workbench (viene incluido)
-   - O desde la terminal:
+   - Abre pgAdmin (viene incluido) o desde la terminal:
      ```bash
-     mysql --version
+     psql --version
      ```
 
 ### macOS
 
-```bash
-# Usando Homebrew
-brew install mysql
+1. **Usando Homebrew (recomendado)**
+   ```bash
+   # Instalar PostgreSQL
+   brew install postgresql@15
+   
+   # Iniciar PostgreSQL
+   brew services start postgresql@15
+   
+   # Crear base de datos inicial
+   createdb $(whoami)
+   ```
 
-# Iniciar MySQL
-brew services start mysql
-
-# Configurar contraseña root
-mysql_secure_installation
-```
+2. **O descargar desde el sitio oficial**
+   - Visita: https://www.postgresql.org/download/macosx/
+   - Descarga el instalador `.dmg`
 
 ### Linux (Ubuntu/Debian)
 
 ```bash
-# Instalar MySQL
+# Actualizar repositorios
 sudo apt update
-sudo apt install mysql-server
 
-# Configurar MySQL
-sudo mysql_secure_installation
+# Instalar PostgreSQL
+sudo apt install postgresql postgresql-contrib
+
+# Iniciar PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
 
 # Verificar instalación
-sudo systemctl status mysql
+sudo systemctl status postgresql
 ```
 
 ### Crear usuario y base de datos de prueba
 
-1. **Acceder a MySQL**
+1. **Acceder a PostgreSQL**
    ```bash
-   mysql -u root -p
+   # En Windows (desde la terminal de PostgreSQL o CMD)
+   psql -U postgres
+   
+   # En macOS/Linux
+   sudo -u postgres psql
+   # O si tienes usuario configurado:
+   psql -U postgres
    ```
 
 2. **Crear usuario y base de datos**
    ```sql
+   -- Crear base de datos
    CREATE DATABASE springboot_db;
-   CREATE USER 'springuser'@'localhost' IDENTIFIED BY 'springpass';
-   GRANT ALL PRIVILEGES ON springboot_db.* TO 'springuser'@'localhost';
-   FLUSH PRIVILEGES;
-   EXIT;
+   
+   -- Crear usuario
+   CREATE USER springuser WITH PASSWORD 'springpass';
+   
+   -- Otorgar privilegios
+   GRANT ALL PRIVILEGES ON DATABASE springboot_db TO springuser;
+   
+   -- Conectarse a la base de datos y otorgar privilegios en el esquema
+   \c springboot_db
+   GRANT ALL ON SCHEMA public TO springuser;
+   
+   -- Salir
+   \q
+   ```
+
+3. **Verificar conexión**
+   ```bash
+   # Probar conexión con el nuevo usuario
+   psql -U springuser -d springboot_db -h localhost
+   # Ingresa la contraseña: springpass
    ```
 
 ---
 
-## 6. Instalación de Postman
+## 7. Instalación de Postman
 
 Postman es útil para probar las APIs REST que crearemos.
 
@@ -294,7 +394,7 @@ Postman es útil para probar las APIs REST que crearemos.
 
 ---
 
-## 7. Verificación de instalaciones
+## 8. Verificación de instalaciones
 
 Ejecuta estos comandos en tu terminal para verificar que todo está instalado correctamente:
 
@@ -303,11 +403,14 @@ Ejecuta estos comandos en tu terminal para verificar que todo está instalado co
 java -version
 javac -version
 
+# Verificar Maven
+mvn -version
+
 # Verificar Git
 git --version
 
-# Verificar MySQL
-mysql --version
+# Verificar PostgreSQL
+psql --version
 
 # Verificar configuración de Git
 git config --global user.name
@@ -317,12 +420,13 @@ git config --global user.email
 ### Checklist de instalación
 
 - [ ] Java JDK 17 o superior instalado
+- [ ] Maven instalado y configurado
 - [ ] Git instalado y configurado
 - [ ] Cuenta de GitHub creada
 - [ ] SSH Key configurada (opcional)
 - [ ] IDE instalado (IntelliJ IDEA o VS Code)
 - [ ] Extensiones de Spring Boot instaladas
-- [ ] MySQL instalado y funcionando
+- [ ] PostgreSQL instalado y funcionando
 - [ ] Postman instalado
 
 ---
@@ -346,10 +450,15 @@ Una vez completada esta instalación, procede con:
 - Reinicia la terminal después de instalar Git
 - Verifica que Git esté en el PATH del sistema
 
-### MySQL no inicia
-- En Windows: Verifica el servicio MySQL en "Servicios"
-- En macOS: `brew services start mysql`
-- En Linux: `sudo systemctl start mysql`
+### Maven no se reconoce en la terminal
+- Verifica que MAVEN_HOME esté configurado
+- Reinicia la terminal después de instalar Maven
+- En Windows, verifica que Maven esté en el PATH
+
+### PostgreSQL no inicia
+- En Windows: Verifica el servicio PostgreSQL en "Servicios" (busca "postgresql")
+- En macOS: `brew services start postgresql@15` (o la versión instalada)
+- En Linux: `sudo systemctl start postgresql`
 
 ### Problemas con SSH en GitHub
 - Asegúrate de haber copiado la clave pública completa
