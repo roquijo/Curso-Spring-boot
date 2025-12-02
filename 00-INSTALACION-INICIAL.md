@@ -279,7 +279,7 @@ git config --global user.email "tu-email@ejemplo.com"
 
 ---
 
-## 6. Instalación de PostgreSQL
+## 6. Instalación de PostgreSQL y Dbeaver
 
 PostgreSQL es un sistema de gestión de bases de datos relacional de código abierto que usaremos en el curso.
 
@@ -300,6 +300,7 @@ PostgreSQL es un sistema de gestión de bases de datos relacional de código abi
 
 3. **Verificar instalación**
    - Abre pgAdmin (viene incluido) o desde la terminal:
+
 
 ### macOS
 
@@ -335,6 +336,12 @@ sudo systemctl enable postgresql
 # Verificar instalación
 sudo systemctl status postgresql
 ```
+
+
+## Dbeaver
+
+- Link de descarga: https://dbeaver.io/download/
+
 
 ---
 
