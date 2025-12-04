@@ -64,20 +64,31 @@ En `pom.xml`, agrega estas dependencias:
 Crea o edita `src/main/resources/application.properties`:
 
 ```properties
-# Configuración de la base de datos
-spring.datasource.url=jdbc:postgresql://localhost:5432/springboot_db
-spring.datasource.username=springuser
-spring.datasource.password=springpass
-spring.datasource.driver-class-name=org.postgresql.Driver
+server:
+  port: 8080
+  servlet:
+    context-path: /producto-api
 
-# Configuración de JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring:
+  application:
+    name: producto-api
 
-# Puerto del servidor
-server.port=8080
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
 ```
 
 ### Explicación de propiedades
