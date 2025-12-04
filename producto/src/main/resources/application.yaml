@@ -1,0 +1,25 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /producto-api
+
+spring:
+  application:
+    name: producto-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
