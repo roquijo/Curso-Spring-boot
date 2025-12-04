@@ -279,7 +279,7 @@ git config --global user.email "tu-email@ejemplo.com"
 
 ---
 
-## 6. Instalación de PostgreSQL
+## 6. Instalación de PostgreSQL y Dbeaver
 
 PostgreSQL es un sistema de gestión de bases de datos relacional de código abierto que usaremos en el curso.
 
@@ -300,9 +300,7 @@ PostgreSQL es un sistema de gestión de bases de datos relacional de código abi
 
 3. **Verificar instalación**
    - Abre pgAdmin (viene incluido) o desde la terminal:
-     ```bash
-     psql --version
-     ```
+
 
 ### macOS
 
@@ -339,44 +337,11 @@ sudo systemctl enable postgresql
 sudo systemctl status postgresql
 ```
 
-### Crear usuario y base de datos de prueba
 
-1. **Acceder a PostgreSQL**
-   ```bash
-   # En Windows (desde la terminal de PostgreSQL o CMD)
-   psql -U postgres
-   
-   # En macOS/Linux
-   sudo -u postgres psql
-   # O si tienes usuario configurado:
-   psql -U postgres
-   ```
+## Dbeaver
 
-2. **Crear usuario y base de datos**
-   ```sql
-   -- Crear base de datos
-   CREATE DATABASE springboot_db;
-   
-   -- Crear usuario
-   CREATE USER springuser WITH PASSWORD 'springpass';
-   
-   -- Otorgar privilegios
-   GRANT ALL PRIVILEGES ON DATABASE springboot_db TO springuser;
-   
-   -- Conectarse a la base de datos y otorgar privilegios en el esquema
-   \c springboot_db
-   GRANT ALL ON SCHEMA public TO springuser;
-   
-   -- Salir
-   \q
-   ```
+- Link de descarga: https://dbeaver.io/download/
 
-3. **Verificar conexión**
-   ```bash
-   # Probar conexión con el nuevo usuario
-   psql -U springuser -d springboot_db -h localhost
-   # Ingresa la contraseña: springpass
-   ```
 
 ---
 
@@ -408,9 +373,6 @@ mvn -version
 
 # Verificar Git
 git --version
-
-# Verificar PostgreSQL
-psql --version
 
 # Verificar configuración de Git
 git config --global user.name

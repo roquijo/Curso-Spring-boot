@@ -64,20 +64,31 @@ En `pom.xml`, agrega estas dependencias:
 Crea o edita `src/main/resources/application.properties`:
 
 ```properties
-# Configuración de la base de datos
-spring.datasource.url=jdbc:postgresql://localhost:5432/springboot_db
-spring.datasource.username=springuser
-spring.datasource.password=springpass
-spring.datasource.driver-class-name=org.postgresql.Driver
+server:
+  port: 8080
+  servlet:
+    context-path: /producto-api
 
-# Configuración de JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring:
+  application:
+    name: producto-api
 
-# Puerto del servidor
-server.port=8080
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
 ```
 
 ### Explicación de propiedades
@@ -92,39 +103,9 @@ server.port=8080
   - `none`: No hace nada
 - `spring.jpa.show-sql`: Muestra las consultas SQL en consola
 
-### Paso 3: Crear la base de datos
-
-```sql
--- Conectarse a PostgreSQL
-psql -U postgres
--- O en Linux: sudo -u postgres psql
-
--- Crear base de datos
-CREATE DATABASE springboot_db;
-
--- Crear usuario (si no existe)
-CREATE USER springuser WITH PASSWORD 'springpass';
-
--- Otorgar privilegios
-GRANT ALL PRIVILEGES ON DATABASE springboot_db TO springuser;
-
--- Conectarse a la base de datos
-\c springboot_db
-
--- Otorgar privilegios en el esquema public
-GRANT ALL ON SCHEMA public TO springuser;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO springuser;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO springuser;
-
--- Salir
-\q
-```
-
-**Nota**: Si ya creaste la base de datos en la guía de instalación, puedes omitir este paso.
-
 ---
 
-## 3. Crear tu primera entidad
+### Paso 3: Crear tu primera entidad
 
 ### Ejemplo: Entidad Producto
 
