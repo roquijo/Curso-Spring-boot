@@ -1,11 +1,9 @@
 package com.devsenior.co.producto.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "producto")
+@Builder
 public class ProductoEntity {
 
     @Id
@@ -22,4 +21,14 @@ public class ProductoEntity {
     private Integer cantidad;
     private Double precio;
     private Boolean estaDisponible;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CategoriaEntity categoria;
+
+    public ProductoEntity(String nombre, Integer cantidad, Double precio, Boolean estaDisponible) {
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.estaDisponible = estaDisponible;
+    }
 }
