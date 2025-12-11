@@ -5,6 +5,7 @@ import com.devsenior.co.producto.model.ProductoEntity;
 import com.devsenior.co.producto.service.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +27,13 @@ public class ProductoController {
 
     @PostMapping
     @Operation(summary = "Crear un producto", description = "Metodo para crear un producto")
-    public ProductoEntity create(@RequestBody ProductoDto producto) {
+    public ProductoEntity create(@Valid @RequestBody ProductoDto producto) {
         return productoService.create(producto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un producto", description = "Metodo para actualizar un producto")
-    public ProductoEntity update(@PathVariable Integer id, @RequestBody ProductoDto producto) {
+    public ProductoEntity update(@PathVariable Integer id,@Valid @RequestBody ProductoDto producto) {
         return productoService.update(id, producto);
     }
 

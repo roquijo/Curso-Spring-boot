@@ -3,9 +3,11 @@ package com.devsenior.co.producto.service;
 import com.devsenior.co.producto.model.ProductoDto;
 import com.devsenior.co.producto.model.ProductoEntity;
 import com.devsenior.co.producto.repository.IProductoRepository;
+import com.devsenior.co.producto.shared.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,7 +28,8 @@ public class ProductoService {
     }
 
     public ProductoEntity update(Integer idEntity, ProductoDto producto) {
-        ProductoEntity entity = iProductoRepository.findById(idEntity).orElseThrow();
+        ProductoEntity entity = iProductoRepository.findById(idEntity).orElseThrow(() ->
+                new CustomException("El producto con id: " + idEntity + " no existe.", new Date()));
         entity.setNombre(producto.getNombre());
         entity.setCantidad(producto.getCantidad());
         entity.setPrecio(producto.getPrecio());
@@ -35,6 +38,8 @@ public class ProductoService {
     }
 
     public void delete(Integer idEntity) {
+        iProductoRepository.findById(idEntity).orElseThrow(() ->
+                new CustomException("El producto con id: " + idEntity + " no existe.", new Date()));
         iProductoRepository.deleteById(idEntity);
     }
 }
