@@ -810,22 +810,28 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RecursoNoEncontradoException.class)
-    public ResponseEntity<Map<String, String>> manejarRecursoNoEncontrado(
-            RecursoNoEncontradoException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("mensaje", ex.getMessage());
-        error.put("codigo", "RECURSO_NO_ENCONTRADO");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<CustomErrorResponse> handleException(CustomException ex) {
+        CustomErrorResponse error = new CustomErrorResponse(ex.getStatus().value(), ex.getMessage(), new Date());
+        return ResponseEntity.status(ex.getStatus()).body(error);
     }
 
-    @ExceptionHandler(StockInsuficienteException.class)
-    public ResponseEntity<Map<String, String>> manejarStockInsuficiente(
-            StockInsuficienteException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("mensaje", ex.getMessage());
-        error.put("codigo", "STOCK_INSUFICIENTE");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", "Error de validación");
+        response.put("timestamp", new Date());
+        response.put("errors", errors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
