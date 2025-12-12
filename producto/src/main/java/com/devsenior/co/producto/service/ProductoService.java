@@ -1,7 +1,7 @@
 package com.devsenior.co.producto.service;
 
 import com.devsenior.co.producto.model.ProductoDto;
-import com.devsenior.co.producto.model.ProductoEntity;
+import com.devsenior.co.producto.model.entity.ProductoEntity;
 import com.devsenior.co.producto.repository.IProductoRepository;
 import com.devsenior.co.producto.shared.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +11,17 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class ProductoService {
+public class ProductoService{
 
     @Autowired
     private IProductoRepository iProductoRepository;
 
     public List<ProductoDto> findAll() {
-        return iProductoRepository.findAll().stream().map( entity ->
-                ProductoDto.builder().nombre(entity.getNombre()).build()
+        return iProductoRepository.findAll().stream().map( producto ->
+                new ProductoDto(producto.getNombre(),
+                        producto.getCantidad(),
+                        producto.getPrecio(),
+                        producto.getEstaDisponible())
         ).toList();
     }
 
@@ -42,4 +45,6 @@ public class ProductoService {
                 new CustomException("El producto con id: " + idEntity + " no existe.", new Date()));
         iProductoRepository.deleteById(idEntity);
     }
+
+
 }

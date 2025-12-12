@@ -1,7 +1,7 @@
 package com.devsenior.co.producto.controller;
 
 import com.devsenior.co.producto.model.ProductoDto;
-import com.devsenior.co.producto.model.ProductoEntity;
+import com.devsenior.co.producto.model.entity.ProductoEntity;
 import com.devsenior.co.producto.service.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +33,7 @@ public class ProductoController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un producto", description = "Metodo para actualizar un producto")
-    public ProductoEntity update(@PathVariable Integer id,@Valid @RequestBody ProductoDto producto) {
+    public ProductoEntity update(@PathVariable Integer id, @Valid @RequestBody ProductoDto producto) {
         return productoService.update(id, producto);
     }
 
