@@ -23,3 +23,14 @@ spring:
         use_sql_comments: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/master
+  oAuthFlow:
+    tokenUrl: http://localhost:8081/realms/master/protocol/openid-connect/token
+
+post:
+  baseUrl: https://jsonplaceholder.typicode.com/posts
