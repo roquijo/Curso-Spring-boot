@@ -1,0 +1,17 @@
+version: '3.8'
+
+# Este archivo es para cuando Keycloak ya está corriendo en otro contenedor
+# Usa este archivo si ya tienes Keycloak configurado: docker-compose -f docker-compose.yml -f docker-compose.keycloak-external.yml up
+
+services:
+  producto-api:
+    environment:
+      # Reemplaza 'keycloak' con el nombre de tu contenedor de Keycloak
+      # O usa 'host.docker.internal:8081' si Keycloak está en el host
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/master
+      SPRING_OAUTHFLOW_TOKENURL: http://keycloak:8080/realms/master/protocol/openid-connect/token
+    # Si Keycloak está en otra red Docker, agrega:
+    # networks:
+    #   - producto-network
+    #   - keycloak-network  # nombre de la red donde está Keycloak
+

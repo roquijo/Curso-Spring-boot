@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  producto-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: producto-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Configuración de base de datos - Conectarse al host local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      # Configuración de OAuth2/Keycloak - Conectarse al contenedor de Keycloak
+      # Si Keycloak está en este docker-compose, usa: http://keycloak:8080
+      # Si Keycloak está en otro contenedor en la misma red, usa el nombre del contenedor
+      # Si Keycloak está en el host, usa: http://host.docker.internal:8081
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/master
+      SPRING_OAUTHFLOW_TOKENURL: http://keycloak:8080/realms/master/protocol/openid-connect/token
+    networks:
+      - producto-network
+    depends_on:
+      - postgres
+      # Keycloak ya está corriendo en otro contenedor, no necesita depends_on
+    restart: unless-stopped
+
+  # Opcional: PostgreSQL en Docker (comentar si usas PostgreSQL en localhost)
+  postgres:
+    image: postgres:16-alpine
+    container_name: producto-postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"  # Puerto diferente para no conflictar con tu PostgreSQL local
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - producto-network
+    restart: unless-stopped
+    # Descomentar la siguiente línea si NO quieres usar PostgreSQL en Docker
+    # profiles:
+    #   - exclude
+
+  # Keycloak para autenticación OAuth2
+  # COMENTADO: Ya tienes Keycloak corriendo en otro contenedor
+  # Si necesitas crear uno nuevo, descomenta este servicio
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:latest
+  #   container_name: producto-keycloak
+  #   command: start-dev
+  #   environment:
+  #     KC_DB: postgres
+  #     KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+  #     KC_DB_USERNAME: keycloak
+  #     KC_DB_PASSWORD: keycloak
+  #     KC_HOSTNAME: localhost
+  #     KC_HOSTNAME_PORT: 8081
+  #     KC_HOSTNAME_STRICT: false
+  #     KC_HTTP_ENABLED: true
+  #     KC_HTTP_PORT: 8080
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #   ports:
+  #     - "8081:8080"
+  #   networks:
+  #     - producto-network
+  #   depends_on:
+  #     - keycloak-db
+  #   restart: unless-stopped
+
+  # Base de datos para Keycloak
+  # COMENTADO: Keycloak usa su propia base de datos
+  # keycloak-db:
+  #   image: postgres:16-alpine
+  #   container_name: producto-keycloak-db
+  #   environment:
+  #     POSTGRES_DB: keycloak
+  #     POSTGRES_USER: keycloak
+  #     POSTGRES_PASSWORD: keycloak
+  #   volumes:
+  #     - keycloak_db_data:/var/lib/postgresql/data
+  #   networks:
+  #     - producto-network
+  #   restart: unless-stopped
+
+networks:
+  producto-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  # keycloak_db_data:  # Comentado porque Keycloak usa su propia BD
+

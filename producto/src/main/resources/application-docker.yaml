@@ -1,0 +1,23 @@
+# Configuración para ejecución en Docker
+# Este perfil se activa automáticamente cuando se ejecuta en Docker
+# o puedes activarlo con: SPRING_PROFILES_ACTIVE=docker
+
+spring:
+  datasource:
+    # Usar host.docker.internal para conectarse al localhost del host
+    # O usar el nombre del servicio si PostgreSQL está en docker-compose
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://host.docker.internal:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Usar host.docker.internal para conectarse a Keycloak en el host
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://host.docker.internal:8081/realms/master}
+  
+  oAuthFlow:
+    tokenUrl: ${SPRING_OAUTHFLOW_TOKENURL:http://host.docker.internal:8081/realms/master/protocol/openid-connect/token}
+

@@ -38,7 +38,7 @@ public class SecurityConfig {
                         // Permitir acceso público a actuator (opcional)
                         .requestMatchers("/actuator/**").permitAll()
                         // Todas las demás rutas requieren autenticación
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
 
                 // Configurar OAuth2 Resource Server con JWT
                 // La configuración del JWT se toma automáticamente de application.yaml

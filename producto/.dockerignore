@@ -1,0 +1,17 @@
+target/
+.mvn/wrapper/maven-wrapper.jar
+.idea/
+.vscode/
+*.iml
+*.class
+.git/
+.gitignore
+README.md
+HELP.md
+.mvn/wrapper/maven-wrapper.properties
+.DS_Store
+*.log
+*.swp
+*.swo
+*~
+
